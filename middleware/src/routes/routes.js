@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Authentication from "../controllers/auth.js";
+import Authentication from "../controllers/authenticate.js";
 import Medicalcontrollers from "../controllers/index.js";
 import Users from "../controllers/users.js";
 
