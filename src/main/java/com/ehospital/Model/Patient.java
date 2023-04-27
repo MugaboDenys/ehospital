@@ -21,6 +21,7 @@ public class Patient extends User {
         super(name, age, gender, password, email, "patient", phone, username);
         physicians = new ArrayList<>();
         pharmacists = new ArrayList<>();
+        physicianDescription = "";
     }
 
     public String getPhysicianDescription() {
@@ -33,6 +34,12 @@ public class Patient extends User {
 
     public void grantAccess(Physician physician) {
         physicians.add(physician);
+        for (Physician p : physicians) {
+            if (p.getPhone().equals(physician.getPhone())) {
+                p.setHasAccess(true);
+                break;
+            }
+        }
     }
 
     public void grantAccess(Pharmacist pharmacist) {

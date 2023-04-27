@@ -4,6 +4,7 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
+  textarea,
 } from "@material-tailwind/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -11,6 +12,9 @@ import { useEffect, useState } from "react";
 function Table({ list, title, role, acces, userName }) {
   const [open, setOpen] = useState(false);
   const [accessStates, setAccessStates] = useState({});
+  const [userData, setUserData] = useState({
+    username : "",gender : "", Age : 0, physicianDescription : "Histopathological: Done by a pathologist after examining sample tissue under a microscope"
+  });
 
   const handleClick = (username, user, role) => {
     console.log(username, user, role)
@@ -33,7 +37,12 @@ function Table({ list, title, role, acces, userName }) {
         alert(error.response.data.message);
       });
   };  
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = (username, gender, Age) => {
+    setUserData(prevD=>{
+      return{...prevD, username, gender, Age}
+    })
+    setOpen(!open)
+  };
   return (
     <div>
       <h2 className="text-center pb-5 text-2xl">{title}</h2>
@@ -51,8 +60,8 @@ function Table({ list, title, role, acces, userName }) {
           {list.map((user) => (
             <tr key={user.username} className="border-t-2 border-teal-300">
               <td
-                className="px-10 py-5 cursor-pointer hover:text-indigo-500"
-                onClick={handleOpen}
+                className={`px-10 py-5 cursor-pointer ${role !== "patient" && "hover:text-indigo-500"}`}
+                onClick={role !== "patient" ? ()=>handleOpen(user.username, user.gender, user.Age) : null}
               >
                 {user.name}
               </td>
@@ -75,11 +84,19 @@ function Table({ list, title, role, acces, userName }) {
         </tbody>
       </table>
       <Dialog open={open} handler={handleOpen}>
-        <DialogHeader> Provide Medecines</DialogHeader>
+        <DialogHeader>{role === "physician" ? "Diagnose" : "Provide Medecine for"}</DialogHeader>
+        <div className="flex justify-center gap-10 mb-10">
+            <h2>{userData.username}</h2>
+            <h2>{userData.gender}</h2>
+            <h2>{userData.Age}</h2>
+          </div>
         <DialogBody divider>
         <div className="role col-start-1 mt-5">
-            <select
-              className="px-20 rounded-2xl h-12 outline-teal-500"
+         <div className="pb-10">
+          {role === "physician" ? <textarea className="border-green-500 border-2 rounded-lg outline-none px-5" placeholder="Lab Results" rows={5} cols={40}/>:<p>{userData.physicianDescription}</p>}
+         </div>
+           {role === "pharmacist" ?  <select
+              className="px-20 rounded-2xl h-8 outline-teal-500"
             >
               <option selected value="">
                 Select Medecine
@@ -87,7 +104,7 @@ function Table({ list, title, role, acces, userName }) {
               <option value="patient">Hybiprofen</option>
               <option value="pharmacist">Acetaminophen</option>
               <option value="physician">Paracetamol</option>
-            </select>
+            </select>: null}
           </div>
         </DialogBody>
         <DialogFooter>

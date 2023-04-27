@@ -8,19 +8,29 @@ import java.util.List;
 
 public class Physician extends User {
 
+    private boolean hasAccess;
+
     public Physician(String name, int age, String gender, String username, String email, String phone, String password) {
         super(name, age, gender, password, email, "physician", phone, username);
-
+        hasAccess = false;
     }
 
     public boolean hasAccess(Patient patient) {
         List<Physician> physicians = patient.getPhysicians();
         for (Physician physician : physicians) {
-            if (this.getEmail().equals(physician.getEmail())) {
+            if (this.getUniqueIdentifier().equals(physician.getUniqueIdentifier())) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void setHasAccess(boolean hasAccess) {
+        this.hasAccess = hasAccess;
+    }
+
+    public boolean getHasAccess() {
+        return hasAccess;
     }
 
     @Override

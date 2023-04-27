@@ -49,6 +49,7 @@ public class ListUsersServlet extends HttpServlet {
                 Patient patient = (Patient) user;
                 userMap.put("physicians", patient.getPhysicians());
                 userMap.put("pharmacists", patient.getPharmacists());
+                userMap.put("physicianDescription", patient.getPhysicianDescription());
             } else if (user instanceof Physician) {
                 Physician physician = (Physician) user;
                 userMap.put("hasAccess", false); // default value

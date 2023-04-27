@@ -1,9 +1,7 @@
 import { Router } from "express";
 import Authentication from "../controllers/authenticate.js";
-import Medicalcontrollers from "../controllers/index.js";
 import Users from "../controllers/users.js";
 
-const { FetchData } = Medicalcontrollers;
 const { Login, Signup } = Authentication;
 const { addAccess, getUsers } = Users;
 

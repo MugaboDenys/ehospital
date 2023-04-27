@@ -59,6 +59,10 @@ const Dashboard = () => {
     const patient = usersArray
     .filter((user) => user.userType === "patient")
     .sort((a, b) => (a.name < b.name ? -1 : 1));  
+
+    const physicianAccess = (physicianName, Arr) =>{
+
+    }
   return (
     <div className="relative bg-gradient-to-b from-teal-100/40 to-teal-800/40 min-h-screen overflow-hidden">
       <img
@@ -96,6 +100,9 @@ const Dashboard = () => {
       <h2 className="title text-teal-500 text-center font-extrabold text-3xl">
         {`Welcome to Ehospital ${username}`}
       </h2>
+      {role !== "patient" && <h2 className="title uppercase pt-5 text-teal-500 text-center font-extrabold text-3xl">
+        {` ${role}s`}
+      </h2>}
       <div className=" mt-10 relative z-20 flex justify-center  gap-2 p-6">
         {role === "patient" ? (
           <div className="flex flex-col gap-10">
