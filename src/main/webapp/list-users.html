@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>List Users</title>
+  </head>
+  <body>
+    <h1>List of Users</h1>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Type</th>
+        <th>Unique Identifier</th>
+      </tr>
+      <% 
+        List<User> users = (List<User>) request.getAttribute("users");
+        for(User user : users) {
+      %>
+        <tr>
+          <td><%= user.getName() %></td>
+          <td><%= user.getAge() %></td>
+          <td><%= user.getGender() %></td>
+          <td><%= user.getClass().getSimpleName() %></td>
+          <td><%= user.getUniqueIdentifier() %></td>
+        </tr>
+      <% } %>
+    </table>
+  </body>
+</html>
