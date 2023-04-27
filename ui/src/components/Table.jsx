@@ -5,24 +5,34 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
-function Table({ list, title, role }) {
+function Table({ list, title, role, acces, userName }) {
   const [open, setOpen] = useState(false);
-  const [access, setAccess]= useState(false)
+  const [accessStates, setAccessStates] = useState({});
 
-  // useEffect(()=>{
-  //   async function grantAccess(){
-  //     const resp = fetch("http://localhost:8080/ehospital/AddAccessServlet",{
-  //       method: "GET",
-  //     });
-  //     const access = await resp.json();
-  //     console.log(access)
-  //   }
-  //   grantAccess()
-  // },[]);
-
-  console.log(role);
+  const handleClick = (username, user, role) => {
+    console.log(username, user, role)
+    const data = {
+      userType: role,
+      username: user ,
+      patientUsername: username,
+    };
+  console.log(username)
+    axios
+      .post("http://localhost:5500/api/v1/addAccess", data)
+      .then((response) => {
+        console.log("sent===>>>", response);
+         setAccessStates({
+          ...accessStates,
+          [user]: true,
+        });
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
+  };  
   const handleOpen = () => setOpen(!open);
   return (
     <div>
@@ -51,10 +61,11 @@ function Table({ list, title, role }) {
               <td className="px-10 py-5">{user.phone}</td>
               {role === "patient" ? (
                 <td className="flex justify-center py-2 px-5">
-                  {access ? <button onClick={()=>setAccess(!access)} className=" py-2 px-5 inline-flex items-center font-bold w-40 text-footerbg bg-blue-100  hover:bg-blue-200 duration-200 rounded-md">
-                    Remove Access
-                  </button> :
-                  <button onClick={()=>setAccess(!access)} className="inline-flex items-center px-5 py-2 bg-primaryColor text-white  w-40 font-bold rounded-md">
+                
+                  {accessStates[user.uniqueIdentifier] ? <label className=" py-2 px-5 inline-flex items-center font-bold w-40 text-footerbg bg-blue-100  hover:bg-blue-200 duration-200 rounded-md">
+                    Access Granted
+                  </label> :
+                  <button onClick={()=>handleClick(userName, user.uniqueIdentifier, user.userType)} className="inline-flex items-center px-5 py-2 bg-primaryColor text-white  w-40 font-bold rounded-md">
                     Grant Access
                   </button>}
                 </td>

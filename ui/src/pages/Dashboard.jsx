@@ -13,6 +13,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const user = localStorage.getItem("user") && localStorage.getItem("user");
+  const username = user === null ? "" : JSON.parse(user).username;
   const role = user === null ? "" : JSON.parse(user).userType;
   console.log(user);
   useEffect(() => {
@@ -43,7 +44,12 @@ const Dashboard = () => {
     navigate("/login");
   };
   const usersArray = Object.values(data);
-  console.log(usersArray)
+  // const uniqueId = usersArray.filter(i=>i.userType === "patient").map(usr=>usr.pharmacists).filter(arr=>arr.length > 0)[0][0].uniqueIdentifier;
+
+  const AccArr = usersArray.filter(i => i.userType === "patient").flatMap(usr => usr.pharmacists).filter(Boolean);
+
+  console.log(AccArr, "<<<<<<<<+++++")
+  
   const pharmacistUsers = usersArray
     .filter((user) => user.userType === "pharmacist")
     .sort((a, b) => (a.Age < b.Age ? -1 : 1));
@@ -88,21 +94,22 @@ const Dashboard = () => {
         </div>
       </div>
       <h2 className="title text-teal-500 text-center font-extrabold text-3xl">
-        {`Welcome to Ehospital ${role}s`}
+        {`Welcome to Ehospital ${username}`}
       </h2>
       <div className=" mt-10 relative z-20 flex justify-center  gap-2 p-6">
         {role === "patient" ? (
           <div className="flex flex-col gap-10">
             <div>
-              <Table list={pharmacistUsers} title={"Pharmacist"} role={role} />
+              <Table list={physicianUsers} title={"Physicians"} role={role} userName={username} />
             </div>
             <div>
-              <Table list={physicianUsers} title={"Physicians"} role={role} />
+              <Table list={pharmacistUsers} title={"Pharmacist"} role={role} userName={username}/>
             </div>
+            
           </div>
         ) : (
           <div>
-            <Table list={patient} title={"Patients"} role={role} />
+            <Table list={patient} title={"Patients"} role={role} userName={username}/>
           </div>
         )}
       </div>

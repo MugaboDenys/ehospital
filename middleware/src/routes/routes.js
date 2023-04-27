@@ -5,7 +5,7 @@ import Users from "../controllers/users.js";
 
 const { FetchData } = Medicalcontrollers;
 const { Login, Signup } = Authentication;
-const { getUser, getUsers } = Users;
+const { addAccess, getUsers } = Users;
 
 const router = Router();
 
@@ -13,5 +13,6 @@ const router = Router();
 router.get("/list-users", getUsers);
 router.post("/signup", Signup);
 router.post("/login", Login);
+router.post("/addAccess", addAccess);
 
 export default router;

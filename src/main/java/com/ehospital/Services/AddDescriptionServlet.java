@@ -31,6 +31,8 @@ public class AddDescriptionServlet extends HttpServlet {
 
         Users usersDao = Users.getUsersDao(request.getSession().getServletContext());
         Patient patient = (Patient) usersDao.getUser(patientUsername);
+        
+        System.out.println("HHH");
 
         // Check if the patient has granted access to the physician
         if (!patient.getPhysicians().contains(physician)) {
