@@ -10,15 +10,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 function Table({ list, title, role, identify, userName }) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user,"++++++++++++++++++++++++")
   const [open, setOpen] = useState(false);
   const [accessStates, setAccessStates] = useState({});
   const [selected, setSelected] = useState("")
+  const [input, setInput] = useState("")
   const [userData, setUserData] = useState({
     username : "",gender : "", Age : 0, physicianDescription : "Histopathological: Done by a pathologist after examining sample tissue under a microscope", pharmacistMeds : ""
   });
 
+  const user = JSON.parse(localStorage.getItem("user"))
   const handleClick = (username, user, role) => {
     console.log(username, user, role)
     const data = {
@@ -40,27 +40,39 @@ function Table({ list, title, role, identify, userName }) {
         alert(error.response.data.message);
       });
   };  
-  const handleSubmit = (role,identifier, patient, selected) => {
+  const handleInput = (e) => {
+    setInput(e.target.value);
+  };
+  const handleSubmit = (role,identifier, patient, selected, input) => {
     console.log(identify)
-    const data = {
+    const data = role === "pharmacist" ?
+    {
       userType: role,
       identifier,
       patientUsername: patient,
       meds: selected
+    }:
+    {
+      userType: role,
+      identifier,
+      patientUsername: patient,
+      diseaseDescription: input
     };
-  console.log(data)
+  
     axios
       .post("http://localhost:5500/api/v1/AddDescriptionServlet", data)
       .then((response) => {
         console.log("sent===>>>", response);
       })
       .catch((error) => {
-        alert(error.response.data.message);
+        console.log(error.response.statusText)
+        alert(`${error.message} ${error.response.statusText}`);
       });
+      setOpen(!open)
   };  
-  const handleOpen = (username, gender, Age) => {
+  const handleOpen = (username, gender, Age, physicianDescription) => {
     setUserData(prevD=>{
-      return{...prevD, username, gender, Age}
+      return{...prevD, username, gender, Age, physicianDescription}
     })
     setOpen(!open)
   };
@@ -118,7 +130,7 @@ function Table({ list, title, role, identify, userName }) {
         <DialogBody divider>
         <div className="role col-start-1 mt-5">
          <div className="pb-10">
-          {role === "physician" ? <textarea className="border-green-500 border-2 rounded-lg outline-none px-5" placeholder="Lab Results" rows={5} cols={40}/>:<p>{userData.physicianDescription}</p>}
+          {role === "physician" ? <textarea className="border-green-500 border-2 rounded-lg outline-none px-5" onChange={handleInput} value={input} placeholder="Lab Results" rows={5} cols={40}/>:<p>{userData.physicianDescription}</p>}
          </div>
            {role === "pharmacist" ?  <select
             onChange={selectDropdown}
@@ -142,7 +154,7 @@ function Table({ list, title, role, identify, userName }) {
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={()=>handleSubmit(role,user?.phone,userData.username,selected)}>
+          <Button variant="gradient" color="green" onClick={()=>handleSubmit(role,role === "pharmacist" ?user?.phone : user?.email,userData.username,selected, input)}>
             <span>Confirm</span>
           </Button>
         </DialogFooter>

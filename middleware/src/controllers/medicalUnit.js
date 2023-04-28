@@ -54,7 +54,8 @@ export default class medicalUnit {
 					.status(500)
 					.json({ message: 'internal server error', error: err });
 			}
-			return res.status(400).json({ message: err.message, error: err });
+            console.log(err)
+			return res.status(401).json({ message: "401 unauthorized", error: err });
 		}
 	}
 }

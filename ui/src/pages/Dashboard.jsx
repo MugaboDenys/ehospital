@@ -4,11 +4,24 @@ import landing from "/landing.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineLogin } from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  textarea,
+} from "@material-tailwind/react";
 import Table from "../components/Table";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [access, setAccess] = useState(false);
+  const [open, setOpen] = useState(false);
+ 
+  const handleOpen = () => setOpen(!open);
+ 
 
   const navigate = useNavigate();
 
@@ -59,11 +72,30 @@ const Dashboard = () => {
     .filter((user) => user.userType === "patient")
     .sort((a, b) => (a.name < b.name ? -1 : 1));  
 
-    const physicianAccess = (physicianName, Arr) =>{
-
-    }
   return (
     <div className="relative bg-gradient-to-b from-teal-100/40 to-teal-800/40 min-h-screen overflow-hidden">
+      <Dialog className="absolute top-10 right-10" open={open} handler={handleOpen}>
+        <DialogHeader>Its a simple dialog.</DialogHeader>
+        <DialogBody divider>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus ad
+          reprehenderit omnis perspiciatis aut odit! Unde architecto
+          perspiciatis, dolorum dolorem iure quia saepe autem accusamus eum
+          praesentium magni corrupti explicabo!
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpen}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleOpen}>
+            <span>Download csv file</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
       <img
         src={hero}
         className="absolute right-0 top-16 z-10 opacity-30 "
@@ -83,7 +115,7 @@ const Dashboard = () => {
           </div>
         </a>
 
-        <div>
+        <div className="flex gap-5">
           <a
             href={"/"}
             onClick={handleLogout}
@@ -94,6 +126,15 @@ const Dashboard = () => {
               <AiOutlineLogin className="text-3xl" />
             </span>
           </a>
+          {role === "patient" ? <button
+            onClick={handleOpen}
+            className="inline-flex items-center px-6 py-2 bg-primaryColor text-white text-xs font-bold rounded-md transform hover:scale-105"
+          >
+            My Account
+            <span>
+              <CgProfile className="text-3xl" />
+            </span>
+          </button> : null}
         </div>
       </div>
       <h2 className="title text-teal-500 text-center font-extrabold text-3xl">
