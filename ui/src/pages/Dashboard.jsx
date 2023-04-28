@@ -14,8 +14,9 @@ const Dashboard = () => {
 
   const user = localStorage.getItem("user") && localStorage.getItem("user");
   const username = user === null ? "" : JSON.parse(user).username;
+  const identifier = user === null ? "" : JSON.parse(user).phone;
   const role = user === null ? "" : JSON.parse(user).userType;
-  console.log(user);
+  console.log(identifier,"<<<<<<<<<<<<<<<<<<<<<<<<<<<");
   useEffect(() => {
     const loggedIn = () => (user ? navigate("/dashboard") : "");
     loggedIn();
@@ -47,8 +48,6 @@ const Dashboard = () => {
   // const uniqueId = usersArray.filter(i=>i.userType === "patient").map(usr=>usr.pharmacists).filter(arr=>arr.length > 0)[0][0].uniqueIdentifier;
 
   const AccArr = usersArray.filter(i => i.userType === "patient").flatMap(usr => usr.pharmacists).filter(Boolean);
-
-  console.log(AccArr, "<<<<<<<<+++++")
   
   const pharmacistUsers = usersArray
     .filter((user) => user.userType === "pharmacist")
@@ -107,10 +106,10 @@ const Dashboard = () => {
         {role === "patient" ? (
           <div className="flex flex-col gap-10">
             <div>
-              <Table list={physicianUsers} title={"Physicians"} role={role} userName={username} />
+              <Table list={physicianUsers} title={"Physicians"} role={role} userName={username} identify={identifier} />
             </div>
             <div>
-              <Table list={pharmacistUsers} title={"Pharmacist"} role={role} userName={username}/>
+              <Table list={pharmacistUsers} title={"Pharmacist"} role={role} userName={username} identify={identifier}/>
             </div>
             
           </div>

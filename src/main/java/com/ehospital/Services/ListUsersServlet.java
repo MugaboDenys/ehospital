@@ -2,6 +2,7 @@ package com.ehospital.Services;
 
 import com.ehospital.DAO.Users;
 import com.ehospital.Model.Patient;
+import com.ehospital.Model.Pharmacist;
 import com.ehospital.Model.Physician;
 import com.ehospital.Model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,8 @@ public class ListUsersServlet extends HttpServlet {
                 userMap.put("physicians", patient.getPhysicians());
                 userMap.put("pharmacists", patient.getPharmacists());
                 userMap.put("physicianDescription", patient.getPhysicianDescription());
+                userMap.put("pharmacistMeds", patient.getPharmacistMeds());
+
             } else if (user instanceof Physician) {
                 Physician physician = (Physician) user;
                 userMap.put("hasAccess", false); // default value
@@ -62,6 +65,22 @@ public class ListUsersServlet extends HttpServlet {
                 for (User patient : patients) {
                     Patient p = (Patient) patient;
                     if (p.getPhysicians().contains(physician)) {
+                        userMap.put("hasAccess", true);
+                        break;
+                    }
+                }
+            }else if (user instanceof Pharmacist) {
+                Pharmacist pharmacist = (Pharmacist) user;
+                userMap.put("hasAccess", false); // default value
+                List<User> patients = new ArrayList<>();
+                for (User u : usersDao.getAllUser()) {
+                    if (u instanceof Patient) {
+                        patients.add(u);
+                    }
+                }
+                for (User patient : patients) {
+                    Patient p = (Patient) patient;
+                    if (p.getPhysicians().contains(pharmacist)) {
                         userMap.put("hasAccess", true);
                         break;
                     }

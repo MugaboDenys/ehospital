@@ -9,11 +9,14 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function Table({ list, title, role, acces, userName }) {
+function Table({ list, title, role, identify, userName }) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user,"++++++++++++++++++++++++")
   const [open, setOpen] = useState(false);
   const [accessStates, setAccessStates] = useState({});
+  const [selected, setSelected] = useState("")
   const [userData, setUserData] = useState({
-    username : "",gender : "", Age : 0, physicianDescription : "Histopathological: Done by a pathologist after examining sample tissue under a microscope"
+    username : "",gender : "", Age : 0, physicianDescription : "Histopathological: Done by a pathologist after examining sample tissue under a microscope", pharmacistMeds : ""
   });
 
   const handleClick = (username, user, role) => {
@@ -37,11 +40,33 @@ function Table({ list, title, role, acces, userName }) {
         alert(error.response.data.message);
       });
   };  
+  const handleSubmit = (role,identifier, patient, selected) => {
+    console.log(identify)
+    const data = {
+      userType: role,
+      identifier,
+      patientUsername: patient,
+      meds: selected
+    };
+  console.log(data)
+    axios
+      .post("http://localhost:5500/api/v1/AddDescriptionServlet", data)
+      .then((response) => {
+        console.log("sent===>>>", response);
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
+  };  
   const handleOpen = (username, gender, Age) => {
     setUserData(prevD=>{
       return{...prevD, username, gender, Age}
     })
     setOpen(!open)
+  };
+  const selectDropdown = (e) => {
+    const val = e.target.value;
+    setSelected(val);
   };
   return (
     <div>
@@ -61,7 +86,7 @@ function Table({ list, title, role, acces, userName }) {
             <tr key={user.username} className="border-t-2 border-teal-300">
               <td
                 className={`px-10 py-5 cursor-pointer ${role !== "patient" && "hover:text-indigo-500"}`}
-                onClick={role !== "patient" ? ()=>handleOpen(user.username, user.gender, user.Age) : null}
+                onClick={role !== "patient" ? ()=>handleOpen(user.username, user.gender, user.Age, user.physicianDescription, user.pharmacistMeds) : null}
               >
                 {user.name}
               </td>
@@ -96,14 +121,15 @@ function Table({ list, title, role, acces, userName }) {
           {role === "physician" ? <textarea className="border-green-500 border-2 rounded-lg outline-none px-5" placeholder="Lab Results" rows={5} cols={40}/>:<p>{userData.physicianDescription}</p>}
          </div>
            {role === "pharmacist" ?  <select
+            onChange={selectDropdown}
               className="px-20 rounded-2xl h-8 outline-teal-500"
             >
               <option selected value="">
                 Select Medecine
               </option>
-              <option value="patient">Hybiprofen</option>
-              <option value="pharmacist">Acetaminophen</option>
-              <option value="physician">Paracetamol</option>
+              <option value="Hybiprofen">Hybiprofen</option>
+              <option value="Acetaminophen">Acetaminophen</option>
+              <option value="Paracetamol">Paracetamol</option>
             </select>: null}
           </div>
         </DialogBody>
@@ -116,7 +142,7 @@ function Table({ list, title, role, acces, userName }) {
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button variant="gradient" color="green" onClick={()=>handleSubmit(role,user?.phone,userData.username,selected)}>
             <span>Confirm</span>
           </Button>
         </DialogFooter>

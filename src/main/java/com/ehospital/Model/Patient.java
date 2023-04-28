@@ -16,12 +16,16 @@ public class Patient extends User {
     private List<Physician> physicians;
     private List<Pharmacist> pharmacists;
     private String physicianDescription;
+    private String pharmacistMeds;
+    
+
 
     public Patient(String name, int age, String gender, String username, String email, String phone, String password) {
         super(name, age, gender, password, email, "patient", phone, username);
         physicians = new ArrayList<>();
         pharmacists = new ArrayList<>();
         physicianDescription = "";
+        pharmacistMeds="";
     }
 
     public String getPhysicianDescription() {
@@ -30,6 +34,14 @@ public class Patient extends User {
 
     public void setPhysicianDescription(String physicianDescription) {
         this.physicianDescription = physicianDescription;
+    }
+    
+     public String getPharmacistMeds() {
+        return pharmacistMeds;
+    }
+
+    public void setPharmacistMeds(String pharmacistMeds) {
+        this.pharmacistMeds = pharmacistMeds;
     }
 
     public void grantAccess(Physician physician) {
