@@ -67,7 +67,7 @@ public class AddDescriptionServlet extends HttpServlet {
                 return;
             }
             if (physician == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Pharmacist not found");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Pharmacist not  found");
                 return;
             }
             patient.setPhysicianDescription(diseaseDescription);

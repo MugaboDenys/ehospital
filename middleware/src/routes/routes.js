@@ -5,7 +5,7 @@ import medicalUnit from "../controllers/medicalUnit.js";
 
 const { Login, Signup } = Authentication;
 const { getUsers } = Users;
-const { addDesc, addAccess } = medicalUnit;
+const { addDesc, addAccess, downloadCSV } = medicalUnit;
 
 const router = Router();
 
@@ -15,5 +15,6 @@ router.post("/signup", Signup);
 router.post("/login", Login);
 router.post("/addAccess", addAccess);
 router.post("/AddDescriptionServlet", addDesc);
+router.get("/downloadCSV", downloadCSV);
 
 export default router;

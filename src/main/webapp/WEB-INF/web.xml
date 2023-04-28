@@ -20,6 +20,10 @@
         <servlet-name>AddDescriptionServlet</servlet-name>
         <servlet-class>com.ehospital.Services.AddDescriptionServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DownloadCSVServlet</servlet-name>
+        <servlet-class>com.ehospital.Services.DownloadCSVServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/SignUpServlet</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>AddDescriptionServlet</servlet-name>
         <url-pattern>/AddDescriptionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadCSVServlet</servlet-name>
+        <url-pattern>/DownloadCSVServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

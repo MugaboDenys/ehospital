@@ -14,6 +14,7 @@ import {
   textarea,
 } from "@material-tailwind/react";
 import Table from "../components/Table";
+import axios from "axios";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -25,11 +26,11 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  const user = localStorage.getItem("user") && localStorage.getItem("user");
-  const username = user === null ? "" : JSON.parse(user).username;
-  const identifier = user === null ? "" : JSON.parse(user).phone;
-  const role = user === null ? "" : JSON.parse(user).userType;
-  console.log(identifier,"<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+  const user = JSON.parse(localStorage.getItem("user"))
+  const username = user ?.username;
+  const identifier = user ?.phone;
+  const role = user ?.userType;
+  console.log(user,"<<<<<<<<<<<<<<<<<<<<<<<<<<<");
   useEffect(() => {
     const loggedIn = () => (user ? navigate("/dashboard") : "");
     loggedIn();
@@ -57,8 +58,22 @@ const Dashboard = () => {
     localStorage.clear();
     navigate("/login");
   };
+  const handleDownload = (patient, results, medicine) =>{
+    const data ={patient, results, medicine}
+    axios
+      .get("http://localhost:5500/api/v1/downloadCSV", data)
+      .then((response) => {
+        console.log("sent===>>>", response);
+         setAccessStates({
+          ...accessStates,
+          [user]: true,
+        });
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
+  }
   const usersArray = Object.values(data);
-  // const uniqueId = usersArray.filter(i=>i.userType === "patient").map(usr=>usr.pharmacists).filter(arr=>arr.length > 0)[0][0].uniqueIdentifier;
 
   const AccArr = usersArray.filter(i => i.userType === "patient").flatMap(usr => usr.pharmacists).filter(Boolean);
   
@@ -75,12 +90,12 @@ const Dashboard = () => {
   return (
     <div className="relative bg-gradient-to-b from-teal-100/40 to-teal-800/40 min-h-screen overflow-hidden">
       <Dialog className="absolute top-10 right-10" open={open} handler={handleOpen}>
-        <DialogHeader>Its a simple dialog.</DialogHeader>
+        <DialogHeader>{user.name}Profile </DialogHeader>
         <DialogBody divider>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus ad
-          reprehenderit omnis perspiciatis aut odit! Unde architecto
-          perspiciatis, dolorum dolorem iure quia saepe autem accusamus eum
-          praesentium magni corrupti explicabo!
+          <h2 className="font-bold">Lab Results :</h2>
+          <p>{user.physicianDescription}</p>
+          <h2 className="font-bold">Suggested Medecines :</h2>
+          <p>{user.pharmacistMeds}</p>
         </DialogBody>
         <DialogFooter>
           <Button
@@ -91,7 +106,7 @@ const Dashboard = () => {
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button variant="gradient" color="green" onClick={()=>handleDownload(username,user.physicianDescription, user.pharmacistMeds)}>
             <span>Download csv file</span>
           </Button>
         </DialogFooter>

@@ -67,7 +67,6 @@ public abstract class User {
     public abstract String getUniqueIdentifier();
 
     public boolean authenticateUser(String uniqueIdentifier, String password) {
-        System.out.println("++*****"+getUniqueIdentifier()+"----------&&&&&&"+uniqueIdentifier);
         return getUniqueIdentifier().equals(uniqueIdentifier) && getPassword().equals(password);
     }
     

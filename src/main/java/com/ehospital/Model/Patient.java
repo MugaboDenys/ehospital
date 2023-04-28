@@ -72,10 +72,10 @@ public class Patient extends User {
         return pharmacists;
     }
 
-    @Override
-    public String getUniqueIdentifier() {
-        return getUsername();
-    }
+        @Override
+        public String getUniqueIdentifier() {
+            return getUsername();
+        }
 
     @Override
     public String register() {
