@@ -24,15 +24,15 @@ public class DownloadCSVServlet extends HttpServlet {
     BufferedReader reader = request.getReader();
     JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
 
-    String patientName = jsonObject.get("patientName").getAsString();
-    String results = jsonObject.get("results").getAsString();
-    String medicine = jsonObject.get("medicine").getAsString();
+    String medName = jsonObject.get("medName").getAsString();
+    String medPrice = jsonObject.get("medPrice").getAsString();
+    String expirationDate = jsonObject.get("expirationDate").getAsString();
 
     response.setContentType("text/csv");
     response.setHeader("Content-Disposition", "attachment; filename=\"data.csv\"");
 
-    String[] header = {"Patient Name", "Disease", "Medecine"};
-    String[] data = {patientName, results, medicine};
+    String[] header = {"Medicine Name", "Medicine Price", "Expiration Date"};
+    String[] data = {medName, medPrice, expirationDate};
 
     CSVWriter writer = new CSVWriter(response.getWriter());
     writer.writeNext(header);

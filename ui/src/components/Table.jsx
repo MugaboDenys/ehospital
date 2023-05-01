@@ -12,7 +12,14 @@ import { useEffect, useState } from "react";
 function Table({ list, title, role, identify, userName }) {
   const [open, setOpen] = useState(false);
   const [accessStates, setAccessStates] = useState({});
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState("");
+  const [values, setValues] = useState(
+    {
+      medecineName : "",
+      medecinePrice: "",
+      expirationDate: ""
+    }
+  );
   const [input, setInput] = useState("")
   const [userData, setUserData] = useState({
     username : "",gender : "", Age : 0, physicianDescription : "Histopathological: Done by a pathologist after examining sample tissue under a microscope", pharmacistMeds : ""
@@ -43,14 +50,20 @@ function Table({ list, title, role, identify, userName }) {
   const handleInput = (e) => {
     setInput(e.target.value);
   };
-  const handleSubmit = (role,identifier, patient, selected, input) => {
+  console.log(input)
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = (role,identifier, patient, input) => {
     console.log(identify)
     const data = role === "pharmacist" ?
     {
       userType: role,
       identifier,
       patientUsername: patient,
-      meds: selected
+      medecineName : values.medecineName,
+      medecinePrice: values.medecinePrice,
+      expirationDate: values.expirationDate
     }:
     {
       userType: role,
@@ -76,10 +89,7 @@ function Table({ list, title, role, identify, userName }) {
     })
     setOpen(!open)
   };
-  const selectDropdown = (e) => {
-    const val = e.target.value;
-    setSelected(val);
-  };
+
   return (
     <div>
       <h2 className="text-center pb-5 text-2xl">{title}</h2>
@@ -120,7 +130,7 @@ function Table({ list, title, role, identify, userName }) {
           ))}
         </tbody>
       </table>
-      <Dialog open={open} handler={handleOpen}>
+      <Dialog open={open} handler={handleOpen} className="">
         <DialogHeader>{role === "physician" ? "Diagnose" : "Provide Medecine for"}</DialogHeader>
         <div className="flex justify-center gap-10 mb-10">
             <h2>{userData.username}</h2>
@@ -130,19 +140,22 @@ function Table({ list, title, role, identify, userName }) {
         <DialogBody divider>
         <div className="role col-start-1 mt-5">
          <div className="pb-10">
-          {role === "physician" ? <textarea className="border-green-500 border-2 rounded-lg outline-none px-5" onChange={handleInput} value={input} placeholder="Lab Results" rows={5} cols={40}/>:<p>{userData.physicianDescription}</p>}
+          {role === "physician" ? <textarea className="border-green-500 border-2 rounded-lg outline-none px-5" onChange={handleInput} value={input} placeholder="Lab Results" rows={5} cols={35}/>:<p>{userData.physicianDescription}</p>}
          </div>
-           {role === "pharmacist" ?  <select
-            onChange={selectDropdown}
-              className="px-20 rounded-2xl h-8 outline-teal-500"
-            >
-              <option selected value="">
-                Select Medecine
-              </option>
-              <option value="Hybiprofen">Hybiprofen</option>
-              <option value="Acetaminophen">Acetaminophen</option>
-              <option value="Paracetamol">Paracetamol</option>
-            </select>: null}
+           {role === "pharmacist" ?  <div className="grid">
+            <div>
+              <h3>Medecine Name</h3>
+              <input type="text" name="medecineName" onChange={handleChange} value={values.medecineName} className="border-4 outline-none px-2 border-green-400" />
+            </div>
+            <div>
+              <h3>Medecine Price</h3>
+              <input type="text" name="medecinePrice" onChange={handleChange} value={values.medecinePrice} className="border-4 outline-none px-2 border-green-400" />
+            </div>
+            <div>
+              <h3>Expiration Date</h3>
+              <input type="text" className="border-4 outline-none border-green-500 px-2" name="expirationDate" onChange={handleChange} value={values.expirationDate} placeholder="Enter date YYYY-MM-DD" />
+            </div>
+           </div>: null}
           </div>
         </DialogBody>
         <DialogFooter>
@@ -154,7 +167,7 @@ function Table({ list, title, role, identify, userName }) {
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={()=>handleSubmit(role,role === "pharmacist" ?user?.phone : user?.email,userData.username,selected, input)}>
+          <Button variant="gradient" color="green" onClick={()=>handleSubmit(role,role === "pharmacist" ?user?.phone : user?.email,userData.username, input)}>
             <span>Confirm</span>
           </Button>
         </DialogFooter>

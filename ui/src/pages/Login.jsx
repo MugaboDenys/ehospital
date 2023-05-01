@@ -13,13 +13,6 @@ const Login = () => {
   });
   const navigate = useNavigate();
 
-  const user = localStorage.getItem("user") && localStorage.getItem("user");
-  // useEffect(() => {
-  //   const loggedIn = () => (user ? navigate("/dashboard") : "");
-
-  //   loggedIn();
-  // }, []);
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -29,7 +22,6 @@ const Login = () => {
       })
       .then(function (response) {
         
-        console.log("datassss===>>>", response);
         localStorage.setItem("user", JSON.stringify(response.data.data));
         navigate("/dashboard");
       })

@@ -42,7 +42,6 @@ public class AddAccessServlet extends HttpServlet {
 
         if (userType.equals("pharmacist")) {
             Pharmacist pharmacist = (Pharmacist) usersDao.getUser(userName);
-            System.out.println("Pharmacist************" + pharmacist.getName());
             if (pharmacist == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Pharmacist not found");
                 return;
@@ -52,7 +51,6 @@ public class AddAccessServlet extends HttpServlet {
         
         if (userType.equals("physician")) {
             Physician physician = (Physician) usersDao.getUser(userName);
-            System.out.println("Physician************" + physician.getName());
             if (physician == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Pharmacist not found");
                 return;

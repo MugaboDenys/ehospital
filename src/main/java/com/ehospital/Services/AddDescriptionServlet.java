@@ -5,6 +5,7 @@
 package com.ehospital.Services;
 
 import com.ehospital.DAO.Users;
+import com.ehospital.Model.Medecine;
 import com.ehospital.Model.Patient;
 import com.ehospital.Model.Pharmacist;
 import com.ehospital.Model.Physician;
@@ -14,7 +15,12 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,28 +45,38 @@ public class AddDescriptionServlet extends HttpServlet {
         Users usersDao = Users.getUsersDao(request.getSession().getServletContext());
         Patient patient = (Patient) usersDao.getUser(patientName);
 
-        System.out.println("HHH");
 
         if (userType.equals("pharmacist")) {
-            String meds = jsonObject.get("meds").getAsString();
-            Pharmacist pharmacist = (Pharmacist) usersDao.getUser(identifier);
-            System.out.println("Pharmacist************" + pharmacist.getName());
-
-            if (!patient.getPharmacists().contains(pharmacist)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                return;
+            try {
+                String medecineName = jsonObject.get("medecineName").getAsString();
+                float medecinePrice = jsonObject.get("medecinePrice").getAsFloat();
+                String expirationDateString = jsonObject.get("expirationDate").getAsString();
+                
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date expirationDate = dateFormat.parse(expirationDateString);
+                
+                Medecine med = new Medecine(medecineName, medecinePrice, expirationDate);
+                
+                Pharmacist pharmacist = (Pharmacist) usersDao.getUser(identifier);
+                
+                if (!patient.getPharmacists().contains(pharmacist)) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    return;
+                }
+                if (pharmacist == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Pharmacist not found");
+                    return;
+                }
+                patient.setPharmacistMeds(med);
+            } catch (ParseException ex) {
+                Logger.getLogger(AddDescriptionServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (pharmacist == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Pharmacist not found");
-                return;
-            }
-            patient.setPharmacistMeds(meds);
+            
         }
 
         if (userType.equals("physician")) {
             Physician physician = (Physician) usersDao.getUser(identifier);
             String diseaseDescription = jsonObject.get("diseaseDescription").getAsString();
-            System.out.println("Physician************" + physician.getName());
 
             if (!patient.getPhysicians().contains(physician)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");

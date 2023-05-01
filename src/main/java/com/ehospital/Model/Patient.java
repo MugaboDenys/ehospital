@@ -16,14 +16,14 @@ public class Patient extends User {
     private List<Physician> physicians;
     private List<Pharmacist> pharmacists;
     private String physicianDescription;
-    private String pharmacistMeds;
+    private List<Medecine> pharmacistMeds;
 
     public Patient(String name, int age, String gender, String username, String email, String phone, String password) {
         super(name, age, gender, password, email, "patient", phone, username);
         physicians = new ArrayList<>();
         pharmacists = new ArrayList<>();
         physicianDescription = "";
-        pharmacistMeds = "";
+        pharmacistMeds = new ArrayList<>();
     }
 
     public String getPhysicianDescription() {
@@ -34,12 +34,12 @@ public class Patient extends User {
         this.physicianDescription = physicianDescription;
     }
 
-    public String getPharmacistMeds() {
+    public List<Medecine> getPharmacistMeds() {
         return pharmacistMeds;
     }
 
-    public void setPharmacistMeds(String pharmacistMeds) {
-        this.pharmacistMeds = pharmacistMeds;
+    public void setPharmacistMeds(Medecine pharmaMedecine) {
+        pharmacistMeds.add(pharmaMedecine);
     }
 
     public void grantAccess(Physician physician) {
@@ -57,7 +57,7 @@ public class Patient extends User {
     }
 
     public void grantAccess(Pharmacist pharmacist) {
-        if (!physicians.isEmpty()) {
+        if (!pharmacists.isEmpty()) {
             throw new IllegalStateException("You already gave access to a pharmacist");
         }
 

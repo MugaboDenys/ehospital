@@ -40,7 +40,7 @@ public class SignUpServlet extends HttpServlet {
         String username = jsonObject.get("username").getAsString();
         String email = jsonObject.get("email").getAsString();
         String identifier;
-        User user;
+        User user = null;
         
         switch (userType) {
             case "patient":
