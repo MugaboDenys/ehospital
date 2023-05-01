@@ -14,11 +14,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   const user = localStorage.getItem("user") && localStorage.getItem("user");
-  useEffect(() => {
-    const loggedIn = () => (user ? navigate("/dashboard") : "");
+  // useEffect(() => {
+  //   const loggedIn = () => (user ? navigate("/dashboard") : "");
 
-    loggedIn();
-  }, []);
+  //   loggedIn();
+  // }, []);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();

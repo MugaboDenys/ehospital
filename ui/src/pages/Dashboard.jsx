@@ -58,24 +58,37 @@ const Dashboard = () => {
     localStorage.clear();
     navigate("/login");
   };
-  const handleDownload = (patient, results, medicine) =>{
-    const data ={patient, results, medicine}
-    axios
-      .get("http://localhost:5500/api/v1/downloadCSV", data)
-      .then((response) => {
-        console.log("sent===>>>", response);
-         setAccessStates({
-          ...accessStates,
-          [user]: true,
-        });
-      })
-      .catch((error) => {
-        alert(error.response.data.message);
+  const handleDownload = async (patient, results, medicine) => {
+    try {
+      const body = {
+        patientName: patient,
+        results: results,
+        medicine: medicine
+      };
+      console.log(results)
+      const response = await fetch("http://localhost:5500/api/v1/downloadCSV", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
       });
-  }
+  
+      const csvBlob = await response.blob();
+  
+      const downloadLink = document.createElement("a");
+      downloadLink.href = window.URL.createObjectURL(csvBlob);
+      downloadLink.download = "data.csv";
+  
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } catch (error) {
+      alert(error);
+    }
+  };
+  
   const usersArray = Object.values(data);
-
-  const AccArr = usersArray.filter(i => i.userType === "patient").flatMap(usr => usr.pharmacists).filter(Boolean);
   
   const pharmacistUsers = usersArray
     .filter((user) => user.userType === "pharmacist")

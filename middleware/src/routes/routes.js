@@ -15,6 +15,6 @@ router.post("/signup", Signup);
 router.post("/login", Login);
 router.post("/addAccess", addAccess);
 router.post("/AddDescriptionServlet", addDesc);
-router.get("/downloadCSV", downloadCSV);
+router.post("/downloadCSV", downloadCSV);
 
 export default router;

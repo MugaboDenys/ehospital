@@ -58,8 +58,16 @@ export default class medicalUnit {
 
   static async downloadCSV(req, res) {
     try {
-      const response = await fetch(`${url}/DownloadCSVServlet`);
+      const response = await fetch(`${url}/DownloadCSVServlet`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(req.body)
+      });
+  
       const csv = await response.text();
+  
       res.setHeader("Content-Type", "text/csv");
       res.setHeader("Content-Disposition", "attachment;filename=data.csv");
       res.send(csv);
@@ -68,5 +76,5 @@ export default class medicalUnit {
       res.status(500).json({ message: "Internal server error" });
     }
   }
-
+  
 }

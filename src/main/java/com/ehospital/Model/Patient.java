@@ -17,15 +17,13 @@ public class Patient extends User {
     private List<Pharmacist> pharmacists;
     private String physicianDescription;
     private String pharmacistMeds;
-    
-
 
     public Patient(String name, int age, String gender, String username, String email, String phone, String password) {
         super(name, age, gender, password, email, "patient", phone, username);
         physicians = new ArrayList<>();
         pharmacists = new ArrayList<>();
         physicianDescription = "";
-        pharmacistMeds="";
+        pharmacistMeds = "";
     }
 
     public String getPhysicianDescription() {
@@ -35,8 +33,8 @@ public class Patient extends User {
     public void setPhysicianDescription(String physicianDescription) {
         this.physicianDescription = physicianDescription;
     }
-    
-     public String getPharmacistMeds() {
+
+    public String getPharmacistMeds() {
         return pharmacistMeds;
     }
 
@@ -45,6 +43,10 @@ public class Patient extends User {
     }
 
     public void grantAccess(Physician physician) {
+        if (!physicians.isEmpty()) {
+            throw new IllegalStateException("You already gave access to a physician");
+        }
+
         physicians.add(physician);
         for (Physician p : physicians) {
             if (p.getPhone().equals(physician.getPhone())) {
@@ -55,6 +57,10 @@ public class Patient extends User {
     }
 
     public void grantAccess(Pharmacist pharmacist) {
+        if (!physicians.isEmpty()) {
+            throw new IllegalStateException("You already gave access to a pharmacist");
+        }
+
         pharmacists.add(pharmacist);
         for (Pharmacist p : pharmacists) {
             if (p.getPhone().equals(pharmacist.getPhone())) {
@@ -72,10 +78,10 @@ public class Patient extends User {
         return pharmacists;
     }
 
-        @Override
-        public String getUniqueIdentifier() {
-            return getUsername();
-        }
+    @Override
+    public String getUniqueIdentifier() {
+        return getUsername();
+    }
 
     @Override
     public String register() {

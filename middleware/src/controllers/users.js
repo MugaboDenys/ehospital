@@ -21,7 +21,7 @@ export default class Users {
 					.status(500)
 					.json({ message: 'internal server error', error: err });
 			}
-			return res.status(400).json({ message: 'Unable to signup', error: err });
+			return res.status(400).json({ message: 'Unable to retrieve users', error: err });
 		}
 	}
 	

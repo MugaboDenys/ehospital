@@ -19,27 +19,26 @@ import javax.servlet.http.HttpServletResponse;
  * @author denys
  */
 public class DownloadCSVServlet extends HttpServlet {
-     
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BufferedReader reader = request.getReader();
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
-        String patientName = jsonObject.get("patientName").getAsString();
-        String results = jsonObject.get("results").getAsString();
-        String medicine = jsonObject.get("medicine").getAsString();
-                System.out.println("+++++++++++++++++++++++"+patientName);
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    Gson gson = new Gson();
+    BufferedReader reader = request.getReader();
+    JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
 
-        response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=\"data.csv\"");
-        
-        String[] header = {"Patient Name", "Disease", "Medecine"};
-        String[] data = {patientName, results, medicine};
-        
-        CSVWriter writer = new CSVWriter(response.getWriter());
-        writer.writeNext(header);
-        writer.writeNext(data);
-        
-        writer.close();
-    }
-    
+    String patientName = jsonObject.get("patientName").getAsString();
+    String results = jsonObject.get("results").getAsString();
+    String medicine = jsonObject.get("medicine").getAsString();
+
+    response.setContentType("text/csv");
+    response.setHeader("Content-Disposition", "attachment; filename=\"data.csv\"");
+
+    String[] header = {"Patient Name", "Disease", "Medecine"};
+    String[] data = {patientName, results, medicine};
+
+    CSVWriter writer = new CSVWriter(response.getWriter());
+    writer.writeNext(header);
+    writer.writeNext(data);
+
+    writer.close();
+  }
 }
+
