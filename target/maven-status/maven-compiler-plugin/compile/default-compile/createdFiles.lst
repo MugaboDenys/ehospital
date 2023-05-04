@@ -1,10 +1,10 @@
 com/ehospital/Model/Physician.class
 com/ehospital/Services/ListUsersServlet.class
 com/ehospital/Services/LoginServlet.class
-com/ehospital/Model/Pharmacist.class
 com/ehospital/DAO/Users.class
-com/ehospital/Main.class
+com/ehospital/Model/Pharmacist.class
 com/ehospital/Services/AddDescriptionServlet.class
+com/ehospital/Main.class
 com/ehospital/Filter/Cors.class
 com/ehospital/Services/SignUpServlet.class
 com/ehospital/Services/DownloadCSVServlet.class

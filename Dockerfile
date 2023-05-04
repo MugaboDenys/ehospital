@@ -1,7 +1,5 @@
-FROM openjdk:8
+FROM tomcat:8.5-jdk8-openjdk
 
-ADD ./target/ehospital-1.0-SNAPSHOT.war  /home/denys/apache-tomcat-8.5.88/webapps
+MAINTAINER Mugabo Denys mugabodan2020@gmail.com
 
-EXPOSE 8080
-
-CMD ["catalina.sh", "run"]
+COPY target/ehospital.war /usr/local/tomcat/webapps/

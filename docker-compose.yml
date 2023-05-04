@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  ui:
+    image: ehospital-ui:latest
+    build: ./ui
+    command: npm run dev
+    container_name: ui-1
+    depends_on:
+      - middleware
+    volumes:
+      - './ui:/ui'
+    ports:
+      - 5173:5173
+    expose:
+      - '5173:5173'
+    restart: unless-stopped
+  middleware:
+    image: ehospital-middleware:latest
+    build: ./middleware
+    container_name: middleware-1
+    depends_on:
+      - ehospital
+    volumes:
+      - ./middleware:/middleware
+    ports:
+      - '5500:5500'
+    expose:
+      - '5500:5500'
+    environment:
+      HOST: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}
+    restart: unless-stopped
+  ehospital:
+    image: ehospital-server:latest
+    build: ./ehospital
+    container_name: ehospital-1
+    volumes:
+      - ./ehospital:/ehospital
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080:8080'
+    restart: unless-stopped

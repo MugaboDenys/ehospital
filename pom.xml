@@ -94,6 +94,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>ehospital</finalName>
     </build>
 
 </project>

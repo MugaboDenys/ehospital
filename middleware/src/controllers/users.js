@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 config();
 
 
-const url = `http://localhost:8080/ehospital`;
+const url = `http://ehospital:8080/ehospital`;
 
 export default class Users {
 	static async getUsers(req, res) {
